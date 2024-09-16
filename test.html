@@ -1,41 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forex Rates</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            color: #333;
-        }
-        #apiData {
-            padding: 10px;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            margin-top: 20px;
-            white-space: pre-wrap;
-        }
-    </style>
-</head>
-<body>
-    <h1>Forex Rates</h1>
-    <div id="apiData">Loading...</div>
-
-   <script>
-    fetch('http://forex.cbm.gov.mm/api/latest')
-        .then(res => res.json())
-        .then(data => {
-            const displayDiv = document.getElementById('apiData');
-            displayDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-        })
-        .catch(error => {
-            console.error('Error fetching the data:', error);
-            document.getElementById('apiData').innerHTML = 'Failed to fetch data from the API.';
-        });
-</script>
-
-</body>
-</html>
+<script>
+fetch('http://forex.cbm.gov.mm/api/latest')
+ .then(res => {
+    return  res.json();
+    })
+ .then(data => {
+     console.log(data);
+  })
+  .catch(error => console.log(error));
+  </script>
+  
