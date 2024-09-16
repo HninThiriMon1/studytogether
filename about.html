@@ -25,6 +25,13 @@
     itemscope="itemscope"
     class="page-template-default page page-id-617 wp-custom-logo ast-desktop ast-page-builder-template ast-no-sidebar astra-4.3.1 ast-single-post ast-inherit-site-logo-transparent ast-theme-transparent-header ast-hfb-header elementor-default elementor-kit-5 elementor-page elementor-page-617"
   >
+    <?php
+
+$data = json_decode(file_get_contents('http://forex.cbm.gov.mm/api/latest'));
+
+print_r($data);
+
+?>
     <div class="hfeed site" id="page">
       <header
         class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-inline ast-hide-custom-menu-mobile ast-builder-menu-toggle-icon ast-mobile-header-inline"
