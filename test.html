@@ -4,60 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Currency Exchange Rates</title>
-    <link rel="stylesheet" href="styles.css">
-  <style>
-    body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
 
-.container {
-    width: 80%;
-    margin: auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
 
-h1 {
-    text-align: center;
-}
+        h1 {
+            text-align: center;
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
 
-th {
-    background-color: #f2f2f2;
-}
+        th {
+            background-color: #f2f2f2;
+        }
 
-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin: 20px 0;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 20px 0;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-button:hover {
-    background-color: #0056b3;
-}
-
-  </style>
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -75,37 +73,35 @@ button:hover {
         </table>
         <button id="refresh-btn">Refresh Rates</button>
     </div>
-    <script src="script.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const refreshButton = document.getElementById('refresh-btn');
-    const exchangeRatesTableBody = document.querySelector('#exchange-rates tbody');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const refreshButton = document.getElementById('refresh-btn');
+            const exchangeRatesTableBody = document.querySelector('#exchange-rates tbody');
 
-    function fetchExchangeRates() {
-        fetch('https://api.exchangerate-api.com/v4/latest/USD')
-            .then(response => response.json())
-            .then(data => {
-                const rates = data.rates;
-                updateTable(rates);
-            })
-            .catch(error => console.error('Error fetching exchange rates:', error));
-    }
+            function fetchExchangeRates() {
+                fetch('http://forex.cbm.gov.mm/api/latest')
+                    .then(response => response.json())
+                    .then(data => {
+                        const rates = data.rates;
+                        updateTable(rates);
+                    })
+                    .catch(error => console.error('Error fetching exchange rates:', error));
+            }
 
-    function updateTable(rates) {
-        exchangeRatesTableBody.innerHTML = '';
-        for (const [currency, rate] of Object.entries(rates)) {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td>${currency}</td><td>${rate.toFixed(4)}</td>`;
-            exchangeRatesTableBody.appendChild(row);
-        }
-    }
+            function updateTable(rates) {
+                exchangeRatesTableBody.innerHTML = '';
+                for (const [currency, rate] of Object.entries(rates)) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${currency}</td><td>${rate}</td>`;
+                    exchangeRatesTableBody.appendChild(row);
+                }
+            }
 
-    refreshButton.addEventListener('click', fetchExchangeRates);
+            refreshButton.addEventListener('click', fetchExchangeRates);
 
-    // Fetch rates on initial load
-    fetchExchangeRates();
-});
-
-  </script>
+            // Fetch rates on initial load
+            fetchExchangeRates();
+        });
+    </script>
 </body>
 </html>
