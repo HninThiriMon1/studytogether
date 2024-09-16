@@ -16,7 +16,7 @@
             background-color: #f9f9f9;
             border: 1px solid #ccc;
             margin-top: 20px;
-            white-space: pre-wrap; /* Display JSON data with proper spacing */
+            white-space: pre-wrap;
         }
     </style>
 </head>
@@ -25,21 +25,17 @@
     <div id="apiData">Loading...</div>
 
     <script>
-        // API URL with CORS proxy
-        const apiUrl = 'https://cors-anywhere.herokuapp.com/http://forex.cbm.gov.mm/api/latest';
+        // CORS proxy URL to bypass the issue
+        const apiUrl = 'https://api.allorigins.win/get?url=http://forex.cbm.gov.mm/api/latest';
 
         // Fetch API data
         fetch(apiUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+            .then(response => response.json())  // Parse the JSON response
             .then(data => {
-                // Process and display the received data
+                // The actual API data is inside the "contents" key
+                const forexData = JSON.parse(data.contents);
                 const displayDiv = document.getElementById('apiData');
-                displayDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                displayDiv.innerHTML = `<pre>${JSON.stringify(forexData, null, 2)}</pre>`;
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
