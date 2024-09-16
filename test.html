@@ -25,23 +25,13 @@
     <div id="apiData">Loading...</div>
 
     <script>
-        // Fetch data from the PHP proxy on your server
-        fetch('forex-proxy.php')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Process and display the received data
-                const displayDiv = document.getElementById('apiData');
-                displayDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                document.getElementById('apiData').innerHTML = 'Failed to fetch data from the API.';
-            });
-    </script>
+fetch('http://forex.cbm.gov.mm/api/latest')
+ .then(res => {
+    return  res.json();
+    })
+ .then(data => {
+     console.log(data);
+  });
+  </script>
 </body>
 </html>
