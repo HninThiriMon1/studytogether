@@ -25,23 +25,15 @@
     <div id="apiData">Loading...</div>
 
 <script>
-    // Ensure that the DOM is fully loaded before running the script
-    document.addEventListener("DOMContentLoaded", function() {
-        const proxyUrl = 'https://api.allorigins.win/get?url=';
-        const apiUrl = 'http://forex.cbm.gov.mm/api/latest';
-
-        fetch(proxyUrl + encodeURIComponent(apiUrl))
-            .then(res => res.json())
-            .then(data => {
-                // The actual API data is in the "contents" key
-                const forexData = JSON.parse(data.contents);
-                console.log(forexData);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    });
-</script>
+fetch('http://forex.cbm.gov.mm/api/latest')
+ .then(res => {
+    return  res.json();
+    })
+ .then(data => {
+     console.log(data);
+  })
+  .catch(error => console.log(error));
+  </script>
 
 
 </body>
