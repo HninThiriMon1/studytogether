@@ -1,76 +1,10 @@
-<!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="assets/css/main.min.css" media="all" />
-    <link
-      rel="stylesheet"
-      href="assets/css/astra-theme-inline.css"
-      media="all"
-    />
-    <link rel="stylesheet" href="assets/css/style.css" media="all" />
-    <link rel="stylesheet" href="assets/css/frontend.css" media="all" />
-    <link rel="stylesheet" href="assets/css/about.css" media="all" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-  </head>
-  <body
-    itemtype="https://schema.org/WebPage"
-    itemscope="itemscope"
-    class="page-template-default page page-id-617 wp-custom-logo ast-desktop ast-page-builder-template ast-no-sidebar astra-4.3.1 ast-single-post ast-inherit-site-logo-transparent ast-theme-transparent-header ast-hfb-header elementor-default elementor-kit-5 elementor-page elementor-page-617"
-  >
-  
-    <?php
-    // API URL
-    $url = 'http://forex.cbm.gov.mm/api/latest';
-    
-    // Use file_get_contents to fetch the data
-    $response = @file_get_contents($url);
-    
-    // Check if the response is not false
-    if ($response !== false) {
-      // Decode the JSON response
-      $data = json_decode($response);
-      
-      // Check if data is properly decoded
-      if ($data) {
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
-      } else {
-        echo "Failed to decode JSON.";
-      }
-    } else {
-      echo "Failed to fetch data from the API.";
-    }
-    ?>
-    
-    <div class="hfeed site" id="page">
-      <header
-        class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-inline ast-hide-custom-menu-mobile ast-builder-menu-toggle-icon ast-mobile-header-inline"
-        id="masthead"
-        itemtype="https://schema.org/WPHeader"
-        itemscope="itemscope"
-        itemid="#masthead"
-      >
-        <div id="ast-desktop-header" data-toggle-type="dropdown">
-          <div class="ast-main-header-wrap main-header-bar-wrap">
-            <div
-              class="ast-primary-header-bar ast-primary-header main-header-bar site-header-focus-item"
-              data-section="section-primary-header-builder"
-            >
-              <!-- Header content goes here -->
-            </div>
-          </div>
-        </div>
-      </header>
-      <!-- Page content goes here -->
-    </div>
-  </body>
-</html>
+<script>
+fetch('http://forex.cbm.gov.mm/api/latest')
+ .then(res => {
+    return  res.json();
+    })
+ .then(data => {
+     console.log(data);
+  })
+  .catch(error => console.log(error));
+  </script>
