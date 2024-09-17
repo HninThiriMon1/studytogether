@@ -1,24 +1,50 @@
-<?php
-// API URL
-$url = 'http://forex.cbm.gov.mm/api/latest';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forex Rates</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        #apiData {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            white-space: pre-wrap; /* Display JSON data with proper spacing */
+        }
+    </style>
+</head>
+<body>
+    <h1>Forex Rates</h1>
+    <div id="apiData">Loading...</div>
 
-// Use file_get_contents to fetch the data
-$response = @file_get_contents($url);
+    <script>
+        // API URL with CORS proxy
+        const apiUrl = 'https://cors-anywhere.herokuapp.com/http://forex.cbm.gov.mm/api/latest';
 
-// Check if the response is not false
-if ($response !== false) {
-    // Decode the JSON response
-    $data = json_decode($response);
-    
-    // Check if data is properly decoded
-    if ($data) {
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
-    } else {
-        echo "Failed to decode JSON.";
-    }
-} else {
-    echo "Failed to fetch data from the API.";
-}
-?>
+        // Fetch API data
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Process and display the received data
+                const displayDiv = document.getElementById('apiData');
+                displayDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('apiData').innerHTML = 'Failed to fetch data from the API.';
+            });
+    </script>
+</body>
+</html>
