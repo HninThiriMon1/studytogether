@@ -118,7 +118,8 @@
             
             let rows = '';
             for (const [currencyCode, rate] of Object.entries(rates)) {
-                const currencyName = currencies[currencyCode] || 'Unknown Currency';
+                // Check if the currency name exists in the API response, otherwise use a fallback
+                const currencyName = currencies[currencyCode] || 'Currency Name Not Available';
                 rows += `
                     <tr>
                         <td>${currencyCode}</td>
