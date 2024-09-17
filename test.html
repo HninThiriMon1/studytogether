@@ -1,7 +1,22 @@
 <?php
 
-$data = json_decode( file_get_contents('http://forex.cbm.gov.mm/api/latest'));
+// Fetch data from the API
+$response = file_get_contents('http://forex.cbm.gov.mm/api/latest');
 
+// Check if the response is successful
+if ($response === FALSE) {
+    die('Error fetching data.');
+}
+
+// Decode the JSON response
+$data = json_decode($response);
+
+// Check if JSON decoding is successful
+if (json_last_error() !== JSON_ERROR_NONE) {
+    die('Error decoding JSON: ' . json_last_error_msg());
+}
+
+// Print the data
 print_r($data);
 
 ?>
