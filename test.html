@@ -111,14 +111,14 @@
         .then(([ratesData, currenciesData]) => {
             // Parse API responses
             const forexData = JSON.parse(ratesData.contents);
-            const currencies = JSON.parse(currenciesData.contents);
+            const currencies = JSON.parse(currenciesData.contents).currencies;
 
             const exchangeRatesTable = document.getElementById('exchangeRates');
             const rates = forexData.rates;
             
             let rows = '';
             for (const [currencyCode, rate] of Object.entries(rates)) {
-                // Check if the currency name exists in the API response, otherwise use a fallback
+                // Use the currency name from the currencies API, otherwise fallback
                 const currencyName = currencies[currencyCode] || 'Currency Name Not Available';
                 rows += `
                     <tr>
