@@ -6,23 +6,65 @@
     <title>Forex Rates</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
         }
         h1 {
-            color: #333;
+            margin: 0;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
         #apiData {
-            padding: 10px;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
             white-space: pre-wrap;
+            color: #333;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        .loading {
+            font-style: italic;
+            color: #888;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
         }
     </style>
 </head>
 <body>
-    <h1>Forex Rates</h1>
-    <div id="apiData">Loading...</div>
+    <header>
+        <h1>Forex Rates</h1>
+    </header>
+
+    <div class="container">
+        <div id="apiData" class="loading">Loading...</div>
+    </div>
+
+    <footer>
+        <p>Data from Central Bank of Myanmar</p>
+    </footer>
 
     <script>
         // Use a CORS proxy to avoid CORS issues
@@ -38,6 +80,7 @@
                 // Display data in the div
                 const displayDiv = document.getElementById('apiData');
                 displayDiv.innerHTML = `<pre>${JSON.stringify(forexData, null, 2)}</pre>`;
+                displayDiv.classList.remove('loading');
             })
             .catch(error => {
                 // Handle errors and display message
