@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forex Rates</title>
+    <title>Currency Exchange Rates</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            background-color: #f0f0f0;
         }
         header {
             background-color: #4CAF50;
@@ -21,22 +21,39 @@
             margin: 0;
         }
         .container {
-            display: grid;
-            grid-template-columns: 1fr;
             max-width: 1200px;
             margin: 40px auto;
             padding: 0 20px;
         }
-        #apiData {
-            padding: 20px;
-            background-color: #fff;
+        .card {
+            background-color: white;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .card h2 {
+            color: #4CAF50;
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
-            white-space: pre-wrap;
-            color: #333;
-            font-size: 1rem;
-            line-height: 1.6;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
         .loading {
             font-style: italic;
@@ -47,23 +64,36 @@
             padding: 10px;
             background-color: #4CAF50;
             color: white;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Forex Rates</h1>
+        <h1>Currency Exchange Rates</h1>
     </header>
 
     <div class="container">
-        <div id="apiData" class="loading">Loading...</div>
+        <div class="card">
+            <h2>Exchange Rates as of Today</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Currency</th>
+                        <th>Rate (MMK)</th>
+                    </tr>
+                </thead>
+                <tbody id="exchangeRates">
+                    <tr>
+                        <td colspan="2" class="loading">Loading exchange rates...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <footer>
-        <p>Data from Central Bank of Myanmar</p>
+        <p>Data sourced from Central Bank of Myanmar</p>
     </footer>
 
     <script>
@@ -71,21 +101,33 @@
         const proxyUrl = 'https://api.allorigins.win/get?url=';
         const apiUrl = 'http://forex.cbm.gov.mm/api/latest';
 
+        // Fetch exchange rates and display in the table
         fetch(proxyUrl + encodeURIComponent(apiUrl))
-            .then(res => res.json()) // Parse the response
+            .then(response => response.json())
             .then(data => {
-                // The actual API data is in the 'contents' key
                 const forexData = JSON.parse(data.contents);
+                const exchangeRatesTable = document.getElementById('exchangeRates');
+                const rates = forexData.rates;
+                
+                let rows = '';
+                for (const [currency, rate] of Object.entries(rates)) {
+                    rows += `
+                        <tr>
+                            <td>${currency}</td>
+                            <td>${rate}</td>
+                        </tr>
+                    `;
+                }
 
-                // Display data in the div
-                const displayDiv = document.getElementById('apiData');
-                displayDiv.innerHTML = `<pre>${JSON.stringify(forexData, null, 2)}</pre>`;
-                displayDiv.classList.remove('loading');
+                exchangeRatesTable.innerHTML = rows;
             })
             .catch(error => {
-                // Handle errors and display message
-                console.error('Error fetching the data:', error);
-                document.getElementById('apiData').innerHTML = 'Failed to fetch data from the API.';
+                console.error('Error fetching exchange rates:', error);
+                document.getElementById('exchangeRates').innerHTML = `
+                    <tr>
+                        <td colspan="2">Failed to load exchange rates</td>
+                    </tr>
+                `;
             });
     </script>
 </body>
