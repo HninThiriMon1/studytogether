@@ -45,6 +45,8 @@
             const proxyUrl = 'https://api.allorigins.win/get?url='; // Alternative CORS proxy
             const response = await fetch(proxyUrl + encodeURIComponent(url));
             const data = await response.json();
+            
+            console.log('Raw response:', data); // Log the raw response
 
             if (data.contents) {
                 const newsData = JSON.parse(data.contents);
