@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Latest News</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -81,8 +80,8 @@
     </footer>
 
     <script>
-        const apiKey = 'pub_53784a29520f8c48116140a4ea106b6240b5f'; // Using your API key
-        const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
+        // Replace this URL with the one you get from your Heroku deployment
+        const apiUrl = 'https://your-heroku-app-name.herokuapp.com/news'; 
 
         async function fetchNews() {
             try {
@@ -123,6 +122,7 @@
             });
         }
 
+        // Load news articles on page load
         window.onload = fetchNews;
     </script>
 </body>
