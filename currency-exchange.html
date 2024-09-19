@@ -21,12 +21,19 @@
             max-width: 100%;
             height: auto;
         }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #777;
+        }
     </style>
 </head>
 <body>
 
 <div class="news-container" id="news-container">
     <h1>Latest News</h1>
+    <p>Your daily source of news from around the world</p>
 </div>
 
 <script>
@@ -43,11 +50,9 @@
                 displayNews(data.articles);
             } else {
                 console.error('Error fetching news:', data.message);
-                document.getElementById('news-container').innerHTML = `<p>Error fetching news: ${data.message}</p>`;
             }
         } catch (error) {
             console.error('Fetch error:', error);
-            document.getElementById('news-container').innerHTML = `<p>Error fetching news: ${error.message}</p>`;
         }
     }
 
@@ -72,6 +77,10 @@
     // Fetch news on page load
     fetchNews();
 </script>
+
+<footer>
+    © 2024 News Inc.
+</footer>
 
 </body>
 </html>
