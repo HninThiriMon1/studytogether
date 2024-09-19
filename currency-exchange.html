@@ -3,83 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Page</title>
+    <title>Currency Exchange Rates</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
         }
-        .news-container {
-            max-width: 800px;
-            margin: 20px auto;
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
         }
-        .news-article {
+        h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .card h2 {
+            color: #4CAF50;
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
             border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
         }
-        .news-article img {
-            max-width: 100%;
-            height: auto;
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .loading {
+            font-style: italic;
+            color: #888;
         }
         footer {
             text-align: center;
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #777;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1>Currency Exchange Rates</h1>
+    </header>
 
-<div class="news-container" id="news-container">
-    <h1>Latest News</h1>
-    <p>Your daily source of news from around the world</p>
-</div>
+    <div class="container">
+        <div class="card">
+            <h2>Exchange Rates as of Today</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Currency Code</th>
+                        <th>Currency Name</th>
+                        <th>Rate (MMK)</th>
+                    </tr>
+                </thead>
+                <tbody id="exchangeRates">
+                    <tr>
+                        <td colspan="3" class="loading">Loading exchange rates...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<script>
-    const apiKey = 'f6ddc2a05cf745278c22fa08f04fcf2d'; // Your API key
-    const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
+    <footer>
+        <p>Data sourced from Central Bank of Myanmar</p>
+    </footer>
 
-    async function fetchNews() {
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
+    <script>
+        // CORS proxy and API URLs
+        const proxyUrl = 'https://api.allorigins.win/get?url=';
+        const ratesApiUrl = 'http://forex.cbm.gov.mm/api/latest';
+        const currenciesApiUrl = 'https://forex.cbm.gov.mm/api/currencies';
 
-            if (data.status === 'ok') {
-                displayNews(data.articles);
-            } else {
-                console.error('Error fetching news:', data.message);
+        // Fetch exchange rates and currency names, then combine them
+        Promise.all([
+            fetch(proxyUrl + encodeURIComponent(ratesApiUrl)).then(res => res.json()),
+            fetch(proxyUrl + encodeURIComponent(currenciesApiUrl)).then(res => res.json())
+        ])
+        .then(([ratesData, currenciesData]) => {
+            // Parse API responses
+            const forexData = JSON.parse(ratesData.contents);
+            const currencies = JSON.parse(currenciesData.contents).currencies;
+
+            const exchangeRatesTable = document.getElementById('exchangeRates');
+            const rates = forexData.rates;
+            
+            let rows = '';
+            for (const [currencyCode, rate] of Object.entries(rates)) {
+                // Use the currency name from the currencies API, otherwise fallback
+                const currencyName = currencies[currencyCode] || 'Currency Name Not Available';
+                rows += `
+                    <tr>
+                        <td>${currencyCode}</td>
+                        <td>${currencyName}</td>
+                        <td>${rate}</td>
+                    </tr>
+                `;
             }
-        } catch (error) {
-            console.error('Fetch error:', error);
-        }
-    }
 
-    function displayNews(articles) {
-        const container = document.getElementById('news-container');
-        articles.forEach(article => {
-            const articleDiv = document.createElement('div');
-            articleDiv.className = 'news-article';
-
-            articleDiv.innerHTML = `
-                <h2>${article.title}</h2>
-                <img src="${article.urlToImage || 'placeholder.jpg'}" alt="Article image">
-                <p>${article.description || 'No description available.'}</p>
-                <a href="${article.url}" target="_blank">Read more</a>
-                <p><small>Published at: ${new Date(article.publishedAt).toLocaleString()}</small></p>
+            exchangeRatesTable.innerHTML = rows;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            document.getElementById('exchangeRates').innerHTML = `
+                <tr>
+                    <td colspan="3">Failed to load exchange rates</td>
+                </tr>
             `;
-
-            container.appendChild(articleDiv);
         });
-    }
-
-    // Fetch news on page load
-    fetchNews();
-</script>
-
-<footer>
-    © 2024 News Inc.
-</footer>
-
+    </script>
 </body>
 </html>
