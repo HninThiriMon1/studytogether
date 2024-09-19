@@ -3,127 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latest News</title>
+    <title>News Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
         }
-
-        header {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 1rem 0;
+        .news-container {
+            max-width: 800px;
+            margin: 20px auto;
         }
-
-        header h1 {
-            margin: 0;
+        .news-article {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
         }
-
-        header p {
-            font-style: italic;
-        }
-
-        main {
-            padding: 1rem;
-        }
-
-        #news-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-
-        article {
-            background-color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        article h2 {
-            margin-top: 0;
-        }
-
-        article img {
-            width: 100%;
+        .news-article img {
+            max-width: 100%;
             height: auto;
-            border-radius: 8px;
         }
-
         footer {
             text-align: center;
-            background-color: #333;
-            color: white;
-            padding: 1rem 0;
-            margin-top: 2rem;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #777;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Latest News</h1>
-        <p>Your daily source of news from around the world</p>
-    </header>
 
-    <main>
-        <section id="news-container">
-            <!-- News articles will be dynamically injected here -->
-        </section>
-    </main>
+<div class="news-container" id="news-container">
+    <h1>Latest News</h1>
+    <p>Your daily source of news from around the world</p>
+</div>
 
-    <footer>
-        <p>&copy; 2024 News Inc.</p>
-    </footer>
+<script>
+    const apiKey = 'f6ddc2a05cf745278c22fa08f04fcf2d'; // Your API key
+    const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
 
-    <script>
-        // Replace this URL with the one you get from your Heroku deployment
-        const apiUrl = 'https://your-heroku-app-name.herokuapp.com/news'; 
+    async function fetchNews() {
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
 
-        async function fetchNews() {
-            try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-
-                if (data.status === 'ok') {
-                    displayNews(data.articles);
-                } else {
-                    console.error('Error fetching news:', data);
-                }
-            } catch (error) {
-                console.error('Error:', error);
+            if (data.status === 'ok') {
+                displayNews(data.articles);
+            } else {
+                console.error('Error fetching news:', data.message);
             }
+        } catch (error) {
+            console.error('Fetch error:', error);
         }
+    }
 
-        function displayNews(articles) {
-            const newsContainer = document.getElementById('news-container');
-            newsContainer.innerHTML = '';  // Clear any previous content
+    function displayNews(articles) {
+        const container = document.getElementById('news-container');
+        articles.forEach(article => {
+            const articleDiv = document.createElement('div');
+            articleDiv.className = 'news-article';
 
-            articles.forEach(article => {
-                // Handle missing images, descriptions, and titles
-                const imageUrl = article.urlToImage ? article.urlToImage : 'https://via.placeholder.com/300x200?text=No+Image';
-                const title = article.title ? article.title : 'No Title';
-                const description = article.description ? article.description : 'No description available';
-                const articleUrl = article.url ? article.url : '#';
+            articleDiv.innerHTML = `
+                <h2>${article.title}</h2>
+                <img src="${article.urlToImage || 'placeholder.jpg'}" alt="Article image">
+                <p>${article.description || 'No description available.'}</p>
+                <a href="${article.url}" target="_blank">Read more</a>
+                <p><small>Published at: ${new Date(article.publishedAt).toLocaleString()}</small></p>
+            `;
 
-                const newsArticle = document.createElement('article');
+            container.appendChild(articleDiv);
+        });
+    }
 
-                newsArticle.innerHTML = `
-                    <img src="${imageUrl}" alt="News Image">
-                    <h2>${title}</h2>
-                    <p>${description}</p>
-                    <a href="${articleUrl}" target="_blank">Read More</a>
-                `;
+    // Fetch news on page load
+    fetchNews();
+</script>
 
-                newsContainer.appendChild(newsArticle);
-            });
-        }
+<footer>
+    © 2024 News Inc.
+</footer>
 
-        // Load news articles on page load
-        window.onload = fetchNews;
-    </script>
 </body>
 </html>
