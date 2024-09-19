@@ -43,9 +43,11 @@
                 displayNews(data.articles);
             } else {
                 console.error('Error fetching news:', data.message);
+                document.getElementById('news-container').innerHTML = `<p>Error fetching news: ${data.message}</p>`;
             }
         } catch (error) {
             console.error('Fetch error:', error);
+            document.getElementById('news-container').innerHTML = `<p>Error fetching news: ${error.message}</p>`;
         }
     }
 
