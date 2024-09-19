@@ -42,7 +42,8 @@
 
     async function fetchNews() {
         try {
-            const response = await fetch(url);
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // CORS proxy
+            const response = await fetch(proxyUrl + url);
             const data = await response.json();
 
             if (data.status === 'ok') {
