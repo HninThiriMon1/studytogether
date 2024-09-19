@@ -42,12 +42,13 @@
 
     async function fetchNews() {
         try {
-            const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // CORS proxy
-            const response = await fetch(proxyUrl + url);
+            const proxyUrl = 'https://api.allorigins.win/get?url='; // Alternative CORS proxy
+            const response = await fetch(proxyUrl + encodeURIComponent(url));
             const data = await response.json();
 
-            if (data.status === 'ok') {
-                displayNews(data.articles);
+            if (data.contents) {
+                const newsData = JSON.parse(data.contents);
+                displayNews(newsData.articles);
             } else {
                 console.error('Error fetching news:', data.message);
             }
