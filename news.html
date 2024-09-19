@@ -5,64 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Latest News</title>
     <link rel="stylesheet" href="styles.css">
-  <style>
-    body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
 
-header {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 1rem 0;
-}
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+        }
 
-header h1 {
-    margin: 0;
-}
+        header h1 {
+            margin: 0;
+        }
 
-header p {
-    font-style: italic;
-}
+        header p {
+            font-style: italic;
+        }
 
-main {
-    padding: 1rem;
-}
+        main {
+            padding: 1rem;
+        }
 
-#news-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-}
+        #news-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
 
-article {
-    background-color: white;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+        article {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-article h2 {
-    margin-top: 0;
-}
+        article h2 {
+            margin-top: 0;
+        }
 
-article img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
+        article img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
 
-footer {
-    text-align: center;
-    background-color: #333;
-    color: white;
-    padding: 1rem 0;
-    margin-top: 2rem;
-}
-  </style>
+        footer {
+            text-align: center;
+            background-color: #333;
+            color: white;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -80,46 +80,50 @@ footer {
         <p>&copy; 2024 News Inc.</p>
     </footer>
 
-    <script src="script.js"></script>
-  <script>
-    const apiKey = 'f6ddc2a05cf745278c22fa08f04fcf2d';
-const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
+    <script>
+        const apiKey = 'pub_53784a29520f8c48116140a4ea106b6240b5f'; // Using your API key
+        const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
 
-async function fetchNews() {
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        
-        if (data.status === 'ok') {
-            displayNews(data.articles);
-        } else {
-            console.error('Error fetching news:', data);
+        async function fetchNews() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    displayNews(data.articles);
+                } else {
+                    console.error('Error fetching news:', data);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
 
-function displayNews(articles) {
-    const newsContainer = document.getElementById('news-container');
-    newsContainer.innerHTML = '';  // Clear any previous content
+        function displayNews(articles) {
+            const newsContainer = document.getElementById('news-container');
+            newsContainer.innerHTML = '';  // Clear any previous content
 
-    articles.forEach(article => {
-        const newsArticle = document.createElement('article');
-        
-        newsArticle.innerHTML = `
-            <img src="${article.urlToImage}" alt="News Image">
-            <h2>${article.title}</h2>
-            <p>${article.description}</p>
-            <a href="${article.url}" target="_blank">Read More</a>
-        `;
-        
-        newsContainer.appendChild(newsArticle);
-    });
-}
+            articles.forEach(article => {
+                // Handle missing images, descriptions, and titles
+                const imageUrl = article.urlToImage ? article.urlToImage : 'https://via.placeholder.com/300x200?text=No+Image';
+                const title = article.title ? article.title : 'No Title';
+                const description = article.description ? article.description : 'No description available';
+                const articleUrl = article.url ? article.url : '#';
 
-window.onload = fetchNews;
+                const newsArticle = document.createElement('article');
 
-  </script>
+                newsArticle.innerHTML = `
+                    <img src="${imageUrl}" alt="News Image">
+                    <h2>${title}</h2>
+                    <p>${description}</p>
+                    <a href="${articleUrl}" target="_blank">Read More</a>
+                `;
+
+                newsContainer.appendChild(newsArticle);
+            });
+        }
+
+        window.onload = fetchNews;
+    </script>
 </body>
 </html>
